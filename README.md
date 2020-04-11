@@ -3,6 +3,7 @@ Minesweeper game.
 
 Student names:
 Siu Ka Sing (3035690373)
+Wan Hing Yin (3035690775)
 
 
 Proposed fulfilments on code requirements:
