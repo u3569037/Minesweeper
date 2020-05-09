@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <chrono>
+#include "explode.h"
 using namespace std;
 using namespace std::chrono;
 
@@ -13,13 +14,11 @@ const int SIZE = 9;     //size of map
 const int mines = 10;   //10 mines
 int board[SIZE][SIZE];
 char display_board[SIZE][SIZE];
-int flagc = 0;
 auto start = system_clock::now();
-
 
 void hscore(){
   string line;
-  int i, n = 0;
+  int i = 0, n = 0;
   ifstream fin;
   cout << "====================Highscore Board====================" << endl;
   fin.open("mkdata.txt");
@@ -60,8 +59,7 @@ void hscore(){
   cout << "=======================================================" << endl;
 }
 
-
-void genboard(){                   //initiation of the board
+  void genboard(){                   //initiation of the board
   int minepos = 0, minecnt = 0;
   cout << "Welcome to Minesweeper game ^_^" << endl;
   cout << "9x9 board." << endl;
@@ -74,8 +72,7 @@ void genboard(){                   //initiation of the board
     minepos = rand() % 81;          //gen 10 coordinates
     if (board[minepos/9][minepos%9] != 1){      //checking for repeat
       board[minepos/9][minepos%9] = 1;        //value of 1 = mine inside
-      minecnt += 1;
-      cout << minepos%9 << "  " << minepos/9 << endl;          //count of placed mines
+      minecnt += 1;      //count of placed mines
     }
   }
   for (int i=0;i<9;i++){
@@ -134,10 +131,7 @@ int num_of_mines(int pos){  //determine the number of mines surrouding the block
 
 void mvboard(){
   char act = ' ';  // store the user action
-  int block[2] = {-1, -1};  // store the selected block
-  char chk;
-  int temp = 0;
-  bool pass = 0;
+  int block[2];  // store the selected block
   cout << "Choose an action: " << endl;
   cout << "F for flag/unflag a block with mine" << endl;
   cout << "C for clicking an unclicked block" << endl;
@@ -151,48 +145,18 @@ void mvboard(){
   }
   cout << "Please input the coordinates of the block" << endl;
   cout << "x-coordinate (horizontal axis): ";
-  cin >> chk;
-  if(isdigit(chk))
-    if((chk >= '0') && (temp <='8'))
-      pass = 1;
-  while (pass == 0){
-  cout << "Error: Invalid input" << endl;
-  cout << "Please input the coordinates of the block" << endl;
-  cout << "x-coordinate (horizontal axis): ";
-  cin >> chk;
-  if(isdigit(chk))
-    if((chk >= '0') && (temp <='8'))
-      pass = 1;
-  cin.clear();
-  fflush(stdin);
+  cin >> block[0];
+  cout << "y-coordinate (vertical axis): ";
+  cin >> block[1];
+  while (board[block[1]][block[0]]==0){   //if clicked or flagged a clicked block
+      cout << "Error: The selected block is already clicked" << endl;
+      cout << "Please input again >w< " << endl;
+      cout << "Please input the coordinates of the block" << endl;
+      cout << "x-coordinate (horizontal axis): ";
+      cin >> block[0];
+      cout << "y-coordinate (vertical axis): ";
+      cin >> block[1];
   }
-  pass = 0;
-  cout << "Selected x: " << int(chk)-'0' << endl;
-  block[0] = int(chk)-'0';
-  cin.clear();
-  fflush(stdin);
-  cout << "Please input the coordinates of the block" << endl;
-  cout << "y-coordinate (horizontal axis): ";
-  cin >> chk;
-  if(isdigit(chk))
-    if((chk >= '0') && (temp <='8'))
-      pass = 1;
-  while (pass == 0){
-  cout << "Error: Invalid input" << endl;
-  cout << "Please input the coordinates of the block" << endl;
-  cout << "y-coordinate (horizontal axis): ";
-  cin >> chk;
-  if(isdigit(chk))
-    if((chk >= '0') && (temp <='8'))
-      pass = 1;
-  cin.clear();
-  fflush(stdin);
-  }
-  pass = 0;
-  block[1] = int(chk)-'0';
-  cout << "Selected y: " << int(chk)-'0' << endl;
-  cin.clear();
-  fflush(stdin);
   int *sempty= new int [81];   //declare a dynamic array to store the surrouding empty blocks
   for(int i = 0; i < 81; ++i){
     sempty[i] = -1;
@@ -203,21 +167,17 @@ void mvboard(){
     if (board[pos/9][pos%9]==2){ //unflag
       board[pos/9][pos%9]=-1;
       display_board[pos/9][pos%9] = 'X';
-      flagc--;
-      cout << "Remaining flags = " << 10 - flagc << endl;
     }
     else{  //flag
-      board[pos/9][pos%9]=2;
-      flagc++;
-      cout << "Remaining flags = " << 10 - flagc << endl;
       display_board[pos/9][pos%9] = 'F';
     }
   }
   if (act == 'C'){
     if (board[pos/9][pos%9]==1){ // if the user click on a block with mine
-       cout << "Bomb!!! You lose >w<" << endl;
-       cout << "Add oil next time ^_^" << endl;
-       endgame=1;
+      explode();
+      cout << "Bomb!!! You lose >w<" << endl;
+      cout << "Add oil next time ^_^" << endl;
+      endgame=1;
     }
     else{
       display_board[pos/9][pos%9]='0'+num_of_mines(pos);
@@ -376,7 +336,6 @@ void mvboard(){
 
 void storemk(){
   string name;
-  int rec;
   ofstream fout;
   auto stop = system_clock::now();
   auto duration = duration_cast<seconds>(stop - start);
@@ -396,7 +355,7 @@ void endchk(){
   bool found = 0;
   for (int i = 0; i < 9; i++)
     for (int j = 0; j < 9; j++)
-      if (board[i][j] == -1)
+      if (display_board[i][j] == 'X')
         found = 1;
   if(!found){
     cout << "You win!! :D)" << endl;
@@ -405,14 +364,12 @@ void endchk(){
   }
 }
 
-
-
 int main(){
   genboard();
   while (endgame == 0){
-  pntboard();
-  mvboard();
-  endchk();
+    pntboard();
+    mvboard();
+    endchk();
   }
   return 0;
 }
