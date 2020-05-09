@@ -12,6 +12,7 @@ NOTE:
 1. To end the game, please make sure all the blocks are clicked, which means no "X" in the board. No matter whether all mines are flagged or not, you should have opened all the blocks without mines in order to win the game
 
 Fulfilments on code requirements:
+
 1.Generation of random game sets or events:
 In the generation of game boards, we applied srand() to randomly generate the position of mines in initial condition.
 
@@ -25,5 +26,5 @@ Dynamic memory arrangement is used in the algorithm of gameplay. When we click o
 Game status including score and game history will be stored in an external .txt file, namely mkdata.txt. This has implemented the file input/output feature.
 
 5.Program codes in multiple files:
-Some functions in the program are stored in separate cpp file and recalled in the main program using .h header.
+Specific function in the program is stored in separate cpp file and recalled in the main program using .h header.
 The display of explosion is stored in the file explode.h and explode.cpp .
