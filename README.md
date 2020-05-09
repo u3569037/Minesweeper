@@ -26,3 +26,4 @@ Game status including score and game history will be stored in an external .txt 
 
 5.Program codes in multiple files:
 Some functions in the program are stored in separate cpp file and recalled in the main program using .h header.
+The display of explosion is stored in the file explode.h and explode.cpp .
