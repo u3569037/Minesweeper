@@ -6,7 +6,10 @@ Siu Ka Sing (3035690373)
 Wan Hing Yin (3035690775)
 
 Title: Minesweeper game
-Basic game rules: The game will be played on a 9x9 board. The board is divided into cells, which have three states: uncovered, covered and flagged. A covered cell is blank and clickable, while an uncovered cell is exposed, either containing a number (the number of mines adjacent to it), or a mine. When a cell is uncovered by a player click, and if it bears a mine, the game ends. A flagged cell is similar to a covered one, in the way that mines are not triggered when a cell is flagged, and it is impossible to lose through the action of flagging a cell. However, flagging a cell implies that a player thinks there is a mine underneath, which causes the game to deduct an available mine from the display.
+
+Basic game rules: The game will be played on a 9x9 board. The board is divided into cells, which have three states: uncovered, covered and flagged. A covered cell is blank and clickable,which is represented as "X" in the game board, while an uncovered cell is exposed, either containing a number (the number of mines adjacent to it and a space " " will be displayed if the number of mines nearby is 0), or a mine. When a cell is uncovered by a player click, and if it bears a mine, the game ends. A flagged cell is similar to a covered one, in the way that mines are not triggered when a cell is flagged, and it is impossible to lose through the action of flagging a cell. However, flagging a cell implies that a player thinks there is a mine underneath, which causes the game to deduct an available mine from the display.
+
+In the game play the player will be asked which action (either click or flag) to be execute, then the player will be asked to input the x- and y- coordinates of the board that they are going to click or flag. This process will be repeated and continue until the end of the game. 
 
 NOTE:
 1. To end the game, please make sure all the blocks are clicked, which means no "X" in the board. No matter whether all mines are flagged or not, you should have opened all the blocks without mines in order to win the game
@@ -27,4 +30,4 @@ Game status including score and game history will be stored in an external .txt 
 
 5.Program codes in multiple files:
 Specific function in the program is stored in separate cpp file and recalled in the main program using .h header.
-The display of explosion is stored in the file explode.h and explode.cpp .
+For instance, the display of explosion is stored in the file explode.h and explode.cpp .
