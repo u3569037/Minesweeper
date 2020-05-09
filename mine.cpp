@@ -4,7 +4,9 @@
 #include <iomanip>
 #include <fstream>
 #include <sstream>
+#include <chrono>
 using namespace std;
+using namespace std::chrono;
 
 int endgame = 0;
 const int SIZE = 9;     //size of map
@@ -12,7 +14,7 @@ const int mines = 10;   //10 mines
 int board[SIZE][SIZE];
 char display_board[SIZE][SIZE];
 int flagc = 0;
-int stime = time(NULL);
+auto start = system_clock::now();
 
 
 void hscore(){
@@ -72,7 +74,8 @@ void genboard(){                   //initiation of the board
     minepos = rand() % 81;          //gen 10 coordinates
     if (board[minepos/9][minepos%9] != 1){      //checking for repeat
       board[minepos/9][minepos%9] = 1;        //value of 1 = mine inside
-      minecnt += 1;           //count of placed mines
+      minecnt += 1;
+      cout << minepos%9 << "  " << minepos/9 << endl;          //count of placed mines
     }
   }
   for (int i=0;i<9;i++){
@@ -375,8 +378,9 @@ void storemk(){
   string name;
   int rec;
   ofstream fout;
-  rec = difftime(time(NULL),stime);
-  cout << "Congradulations! You win the game in " << rec << " seconds!" << endl;
+  auto stop = system_clock::now();
+  auto duration = duration_cast<seconds>(stop - start);
+  cout << "Congradulations! You win the game in " <<  duration.count() << " seconds!" << endl;
   cout << "Please type your name for recording: ";
   cin >> name;
 	fout.open("mkdata.txt", ios::app);
@@ -384,7 +388,7 @@ void storemk(){
 		cout << "Error in file opening!" << endl;
       exit(1);
   }
-  fout << name << " " << rec << endl;
+  fout << name << " " <<  duration.count() << endl;
    fout.close();
 }
 
