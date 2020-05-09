@@ -16,6 +16,7 @@ int board[SIZE][SIZE];
 char display_board[SIZE][SIZE];
 auto start = system_clock::now();
 
+//make a sorted score board
 void hscore(){
   string line;
   int i = 0, n = 0;
@@ -43,6 +44,7 @@ void hscore(){
     ins >> score[i];
     i++;
 	}
+  //sort the records
   for (int i = 0; i < n - 1; i++){
 		int min = i;
 		for (int j = i + 1; j < n; j++)
@@ -82,7 +84,8 @@ void hscore(){
   }
 }
 
-void pntboard(){            //print the changed board
+//print the board
+void pntboard(){
     char fill = ' ';
     cout << "* |";
     for (int i = 0; i < SIZE; i++)
@@ -100,7 +103,8 @@ void pntboard(){            //print the changed board
     }
 }
 
-int num_of_mines(int pos){  //determine the number of mines surrouding the block
+//determine the number of mines surrouding the block
+int num_of_mines(int pos){ 
   int mines=0;
   if (pos/9+1<9 && pos/9+1>=0 && pos%9+1<9 && pos%9+1>=0){
     if (board[pos/9+1][pos%9+1]==1) mines++;
@@ -129,21 +133,22 @@ int num_of_mines(int pos){  //determine the number of mines surrouding the block
   return mines;
 }
 
+//generate changes of board after the player clicked on a block
 void mvboard(){
   char act = ' ';  // store the user action
   int block[2];  // store the selected block
-  cout << "Choose an action: " << endl;
+  cout << "Choose an action: " << endl;         //get the user choice of option
   cout << "F for flag/unflag a block with mine" << endl;
   cout << "C for clicking an unclicked block" << endl;
   cout << "Action: ";
   cin >> act;
-  while (act!='C' && act!='F'){
+  while (act!='C' && act!='F'){            //check whether the input is valid
     cout << "Error: Invalid input" << endl;
     cout << "Please input again >w<"<<endl;
     cout << "Action: ";
     cin >> act;
   }
-  cout << "Please input the coordinates of the block" << endl;
+  cout << "Please input the coordinates of the block" << endl;   //get the coordinates of the block clicked by player
   cout << "x-coordinate (horizontal axis): ";
   cin >> block[0];
   cout << "y-coordinate (vertical axis): ";
@@ -180,12 +185,12 @@ void mvboard(){
       endgame=1;
     }
     else{
-      display_board[pos/9][pos%9]='0'+num_of_mines(pos);
-      if (display_board[pos/9][pos%9] == '0'){
+      display_board[pos/9][pos%9]='0'+num_of_mines(pos);   //determine the numbers displayed in the block clicked
+      if (display_board[pos/9][pos%9] == '0'){    //if no mines nearby the block will become empty
         display_board[pos/9][pos%9] = ' ';
         board[pos/9][pos%9] = 0;
       }
-      while (display_board[pos/9][pos%9] == ' ' && pos!=-1){ // find empty blocks nearby and calculate the numbers displayed
+      while (display_board[pos/9][pos%9] == ' ' && pos!=-1){ //find empty blocks nearby and calculate the numbers displayed on that block
         if (pos/9+1<9 && pos/9+1>=0 && pos%9+1<9 && pos%9+1>=0){
           if (num_of_mines(pos+9+1)==0 && board[pos/9+1][pos%9+1]!=1){
             display_board[pos/9+1][pos%9+1] = ' ';
@@ -334,6 +339,7 @@ void mvboard(){
   delete [] sempty;
 }
 
+//store the used time of the player and his name after he wins
 void storemk(){
   string name;
   ofstream fout;
@@ -351,6 +357,7 @@ void storemk(){
    fout.close();
 }
 
+//check whether the games ended (all blocks are clicked)
 void endchk(){
   bool found = 0;
   for (int i = 0; i < 9; i++)
