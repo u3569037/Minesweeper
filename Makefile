@@ -1,7 +1,10 @@
 FLAGS = -pedantic-errors -std=c++11
 
-mine.o: mine.cpp
+explode.o: explode.cpp explode.h
+					g++ $(FLAGS) -c explode.cpp
+
+mine.o: mine.cpp explode.h
 				g++ $(FLAGS) -c mine.cpp
 
-mine: mine.o
-			g++ $(FLAGS) mine.o -o mine
+mine: explode.o mine.o
+			g++ $(FLAGS) explode.o mine.o -o mine
